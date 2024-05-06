@@ -1,9 +1,8 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
+import {icon, latLng, Map as LeafletMap, MapOptions, Marker, MarkerOptions, Polyline, tileLayer} from 'leaflet';
 import {User} from "./models/user.model";
 import {UserService} from "./services/user.service";
-import {Map as LeafletMap} from "leaflet";
-import {MapOptions, tileLayer, latLng, Marker, MarkerOptions, Polyline} from "leaflet";
 
 @Component({
   selector: 'app-root',
@@ -28,25 +27,40 @@ export class AppComponent implements OnInit {
   marker: Marker | undefined;
 
   ngOnInit(): void {
+    const iconRetinaUrl = 'assets/marker-icon-2x.png';
+    const iconUrl = 'assets/marker-icon.png';
+    const shadowUrl = 'assets/marker-shadow.png';
+    const iconDefault = icon({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41]
+    });
+    Marker.prototype.options.icon = iconDefault;
+
     this.initializeMapOptions();
 
     this.userService.fetchUsers().subscribe(
       (data) => {
         // Handle the response data here
 
-        if (data.length != this.prevUserSize) {
+        if (data.length!=this.prevUserSize) {
           data.slice(this.prevUserSize).forEach((user: User) => this.headingsDrawnPerUser.set(user.userId, 0)
           )
           this.marker = this.createMarker(data[this.prevUserSize].lat, data[this.prevUserSize].long); // Coordinates for the marker
           this.marker.addTo(this.map)
-          var length =  this.polylines.push(this.createPolyline(data[this.prevUserSize].lat, data[this.prevUserSize].long));
+          var length = this.polylines.push(this.createPolyline(data[this.prevUserSize].lat, data[this.prevUserSize].long));
 
-          this.polylines[length-1].addTo(this.map);
+          this.polylines[length - 1].addTo(this.map);
           this.prevUserSize++;
         }
         data.forEach((user: User) => {
-          var correspondingUser = this.users.find(prevUser => prevUser.userId == user.userId);
-          if (correspondingUser != undefined) {
+          var correspondingUser = this.users.find(prevUser => prevUser.userId==user.userId);
+          if (correspondingUser!=undefined) {
 
             console.log(`${user.headingArray.length}, ${correspondingUser.headingArray.length}`)
             if (true) {
@@ -73,7 +87,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  private initializeMapOptions() {
+  private async initializeMapOptions() {
     this.mapOptions = {
       layers: [
         tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -94,6 +108,7 @@ export class AppComponent implements OnInit {
 
   private createMarker(latitude: number, longitude: number): Marker {
     const markerOptions: MarkerOptions = {};
+    this.map.flyTo([latitude, longitude]);
     return new Marker(latLng(latitude, longitude));
   }
 
@@ -108,7 +123,7 @@ export class AppComponent implements OnInit {
     let foundUser: User | undefined;
     let foundNumber: number = 0;
     // Update the number associated with the found user
-    this.headingsDrawnPerUser.set(userId, foundNumber + 1 );
+    this.headingsDrawnPerUser.set(userId, foundNumber + 1);
     polyline.addLatLng([lat, long])
   }
 
@@ -127,25 +142,40 @@ export class AppComponent implements OnInit {
     const deltaLongitude = dx / (earthRadius * Math.cos(latitude * Math.PI / 180)) * (180 / Math.PI);
     const deltaLatitude = dy / earthRadius * (180 / Math.PI);
 
-    // Calculate final coordinates
     const newLatitude = latitude + deltaLatitude;
     const newLongitude = longitude + deltaLongitude;
 
     return {latitude: newLatitude, longitude: newLongitude};
   }
 
-  private returnLatLongDelta(headingRadians: number, distanceMeters: number) {
-    const earthRadius = 6378137; // Approximate value for WGS84 ellipsoid
+  getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            if (position) {
+              console.log(
+                'Latitude: ' +
+                position.coords.latitude +
+                'Longitude: ' +
+                position.coords.longitude
+              );
+              let lat = position.coords.latitude;
+              let lng = position.coords.longitude;
 
-    // Convert heading to Cartesian coordinates
-    const dx = Math.cos(headingRadians) * distanceMeters;
-    const dy = Math.sin(headingRadians) * distanceMeters;
-
-    // Convert offset in meters to offset in degrees (longitude and latitude)
-    const deltaLongitude = dx / (earthRadius * Math.cos(54.3 * Math.PI / 180)) * (180 / Math.PI);
-    const deltaLatitude = dy / earthRadius * (180 / Math.PI);
-
-    return {latitude: deltaLatitude, longitude: deltaLongitude};
+              const location = {
+                lat,
+                lng,
+              };
+              resolve(location);
+            }
+          },
+          (error) => console.log(error)
+        );
+      } else {
+        reject('Geolocation is not supported by this browser.');
+      }
+    });
   }
 
 }
