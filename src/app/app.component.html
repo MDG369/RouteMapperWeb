@@ -1,30 +1,34 @@
 <!-- Just an image -->
-<nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <img src="assets/svg/map-svgrepo-com.svg" class="d-inline-block align-top" width="30" height="30" alt="">
-    Project X
-  </a>
-</nav>
+<aside class="flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-5 py-8" style="padding: 1rem">
+  <img src="assets/svg/map-svgrepo-com.svg" class="d-inline-block align-top" width="30" height="30" alt="">
+  Project X
+</aside>
+
 <div class="row">
-  <div class="col-3 col-table">
-    <table class="table table-sm table-striped">
-      <thead>
-      <tr>
-        <th class="col-id">UserId</th>
-        <th scope="col">Lat</th>
-        <th scope="col">Long</th>
+
+  <div class="col-2 col-table">
+    <d-data-table>
+      <thead  dTableHead>
+      <tr dTableRow>
+        <th class="col-id" dHeadCell>UserId</th>
+        <th scope="col" dHeadCell>Lat</th>
+        <th scope="col" dHeadCell>Long</th>
       </tr>
       </thead>
-      <tbody>
-      <tr *ngFor="let user of users; let i = index">
-        <td>{{ user.userId }}</td>
-        <td>{{ user.lat }}</td>
-        <td>{{ user.long }}</td>
-      </tr>
+      <tbody dTableBody>
+      <ng-template let-user="users" let-rowIndex="rowIndex">
+
+        <tr dTableRow>
+          <td dTableCell>{{ user.userId }}</td>
+          <td dTableCell>{{ user.lat }}</td>
+          <td dTableCell>{{ user.long }}</td>
+        </tr>
+      </ng-template>
       </tbody>
-    </table>
+    </d-data-table>
+
   </div>
-  <div class="col-9 col-map">
+  <div class="col-10 col-map">
     <div class="map"
          leaflet
          [leafletOptions]="mapOptions"

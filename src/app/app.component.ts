@@ -1,6 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
-import {icon, latLng, Map as LeafletMap, MapOptions, Marker, MarkerOptions, Polyline, tileLayer} from 'leaflet';
+import {
+  icon,
+  latLng,
+  Map as LeafletMap,
+  MapOptions,
+  Marker,
+  MarkerOptions,
+  Polyline,
+} from 'leaflet';
+import 'leaflet.gridlayer.googlemutant';
+
 import {User} from "./models/user.model";
 import {UserService} from "./services/user.service";
 
@@ -89,13 +99,6 @@ export class AppComponent implements OnInit {
 
   private async initializeMapOptions() {
     this.mapOptions = {
-      layers: [
-        tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 25,
-          attribution: 'Map data © OpenStreetMap contributors'
-
-        })
-      ],
       zoom: 18,
       center: new L.LatLng(54.371651, 18.612552)
     };
@@ -103,6 +106,11 @@ export class AppComponent implements OnInit {
 
   onMapReady(map: LeafletMap) {
     this.map = map;
+    var roads = L.gridLayer.googleMutant({
+        type: "roadmap", // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+      })
+      .addTo(this.map);
+
   }
 
 
