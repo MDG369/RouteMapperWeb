@@ -2,6 +2,7 @@
 body {
   width: 100vw;
   height: 93vh;
+  background-color: aliceblue !important;
 }
 
 footer {
