@@ -10,6 +10,10 @@
 }
 
 .col-map {
+  margin: 1rem;
+  width: 95%;
+  height: 90%;
+  position: absolute;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -30,7 +34,7 @@
 }
 
 nav {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);*/
   height: 4rem;
   z-index: 1;
   flex: 0 1 auto;

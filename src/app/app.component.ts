@@ -13,6 +13,7 @@ import 'leaflet.gridlayer.googlemutant';
 
 import {User} from "./models/user.model";
 import {UserService} from "./services/user.service";
+import {faCoffee, faUsers} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-root',
@@ -73,6 +74,7 @@ export class AppComponent implements OnInit {
           if (correspondingUser!=undefined) {
 
             console.log(`${user.headingArray.length}, ${correspondingUser.headingArray.length}`)
+            console.log(this.users)
             if (true) {
               for (let i = correspondingUser.headingArray.length; i < user.headingArray.length; i++) {
                 const lastLatLongs = this.polylines[user.userId].getLatLngs();
@@ -186,6 +188,8 @@ export class AppComponent implements OnInit {
     });
   }
 
+  protected readonly faCoffee = faCoffee;
+  protected readonly faUsers = faUsers;
 }
 
 

@@ -2,37 +2,47 @@
 <aside class="flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-5 py-8" style="padding: 1rem">
   <img src="assets/svg/map-svgrepo-com.svg" class="d-inline-block align-top" width="30" height="30" alt="">
   Project X
-</aside>
-
-<div class="row">
-
-  <div class="col-2 col-table">
-    <d-data-table>
-      <thead  dTableHead>
-      <tr dTableRow>
-        <th class="col-id" dHeadCell>UserId</th>
-        <th scope="col" dHeadCell>Lat</th>
-        <th scope="col" dHeadCell>Long</th>
-      </tr>
-      </thead>
-      <tbody dTableBody>
-      <ng-template let-user="users" let-rowIndex="rowIndex">
-
-        <tr dTableRow>
-          <td dTableCell>{{ user.userId }}</td>
-          <td dTableCell>{{ user.lat }}</td>
-          <td dTableCell>{{ user.long }}</td>
-        </tr>
-      </ng-template>
-      </tbody>
-    </d-data-table>
-
-  </div>
-  <div class="col-10 col-map">
-    <div class="map"
-         leaflet
-         [leafletOptions]="mapOptions"
-         (leafletMapReady)="onMapReady($event)">
+  <div class="row">
+    <div class="col-12">
     </div>
   </div>
+</aside>
+
+
+<div class="container-fluid">
+  <div class="row">
+
+      <div class="col-map">
+        <div class="map"
+             leaflet
+             [leafletOptions]="mapOptions"
+             (leafletMapReady)="onMapReady($event)">
+          <div class="flex-row-reverse" style="z-index:2222; position:absolute; right:0; display:flex">
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#sidebarContent" style="max-height:2.5rem">
+            <fa-icon [icon]="faUsers"></fa-icon>
+          </button>
+          <div class="collapse" id="sidebarContent" >
+            <table>
+              <thead>
+              <tr>
+                <th>UserId</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-template ngFor let-user [ngForOf]="users">
+                <tr>
+                  <td>{{user.userId}}</td>
+                </tr>
+              </ng-template>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+
+      </div>
+  </div>
 </div>
+
+
+

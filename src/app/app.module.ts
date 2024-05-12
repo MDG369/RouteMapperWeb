@@ -7,6 +7,7 @@ import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 // need for animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DevUIModule } from 'ng-devui';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { DevUIModule } from 'ng-devui';
     BrowserModule,
     LeafletModule,
     BrowserAnimationsModule,
-    DevUIModule
+    DevUIModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
