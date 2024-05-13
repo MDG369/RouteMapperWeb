@@ -9,6 +9,6 @@
 - ``npm server``
 Serwer powinien uruchomić się na porcie 8080
 ### Frontend
-- ``nmp i``
+- ``npm i``
 - ``npm start``
-Serwer powinien uruchomić się na porcie 4200
+Frontend powinien uruchomić się na porcie 4200
