@@ -1,42 +1,33 @@
 <!-- Just an image -->
-<nav class="flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-5 py-8" style="padding: 1rem">
-  <img src="assets/svg/map-svgrepo-com.svg" class="d-inline-block align-top" width="30" height="30" alt="">
-  Project X
+<nav class="navbar bg-white" style="padding: 1rem">
+  <div class="navbar-brand">
+    <img src="../assets/icon.png" width="40" height="40" alt="" class="d-inline-block align-top">
+    Project X
+  </div>
 </nav>
-
-
-<div class="container-fluid">
-  <div class="row">
-
-      <div class="col-map">
-        <div class="map"
-             leaflet
-             [leafletOptions]="mapOptions"
-             (leafletMapReady)="onMapReady($event)">
-          <div class="flex-row-reverse" style="z-index:2222; position:absolute; right:0; display:flex">
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#sidebarContent" style="max-height:2.5rem">
-            <fa-icon [icon]="faUsers"></fa-icon>
-          </button>
-          <div class="collapse" id="sidebarContent" >
-            <table>
-              <thead>
-              <tr>
-                <th>UserId</th>
-              </tr>
-              </thead>
-              <tbody>
-              <ng-template ngFor let-user [ngForOf]="users">
-                <tr>
-                  <td>{{user.userId}}</td>
-                </tr>
-              </ng-template>
-              </tbody>
-            </table>
-          </div>
-          </div>
-        </div>
-
-      </div>
+<div class="row">
+  <div class="col-2">
+    <table class="table table-striped table-hover" style="margin-top: 2.5rem">
+      <thead class="table-dark">
+      <tr>
+        <th scope="col">Session Id</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-template ngFor let-user [ngForOf]="users">
+        <tr>
+          <td>{{ user.sessionId | date: "yyyyMMdd_hhmm" }}</td>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-10 col-map">
+    <div class="map"
+         leaflet
+         [leafletOptions]="mapOptions"
+         (leafletMapReady)="onMapReady($event)">
+    </div>
   </div>
 </div>
 

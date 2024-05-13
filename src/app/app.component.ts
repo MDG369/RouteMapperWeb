@@ -6,14 +6,12 @@ import {
   Map as LeafletMap,
   MapOptions,
   Marker,
-  MarkerOptions,
   Polyline,
 } from 'leaflet';
 import 'leaflet.gridlayer.googlemutant';
 
 import {User} from "./models/user.model";
 import {UserService} from "./services/user.service";
-import {faCoffee, faUsers} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-root',
@@ -57,68 +55,65 @@ export class AppComponent implements OnInit {
 
     this.userService.fetchUsers().subscribe(
       (data) => {
-        // Handle the response data here
-
-        if (data.length!=this.prevUserSize) {
-          data.slice(this.prevUserSize).forEach((user: User) => this.headingsDrawnPerUser.set(user.userId, 0)
-          )
-          this.marker = this.createMarker(data[this.prevUserSize].lat, data[this.prevUserSize].long); // Coordinates for the marker
-          this.marker.addTo(this.map)
-          var length = this.polylines.push(this.createPolyline(data[this.prevUserSize].lat, data[this.prevUserSize].long));
-
-          this.polylines[length - 1].addTo(this.map);
-          this.prevUserSize++;
+        if (data.length != this.prevUserSize) {
+          this.handleNewUser(data);
         }
         data.forEach((user: User) => {
-          var correspondingUser = this.users.find(prevUser => prevUser.userId==user.userId);
-          if (correspondingUser!=undefined) {
-
-            console.log(`${user.headingArray.length}, ${correspondingUser.headingArray.length}`)
-            console.log(this.users)
-            if (true) {
-              for (let i = correspondingUser.headingArray.length; i < user.headingArray.length; i++) {
-                const lastLatLongs = this.polylines[user.userId].getLatLngs();
-                // @ts-ignore
-                const lastLat = lastLatLongs[lastLatLongs.length - 1].lat;
-                // @ts-ignore
-                const lastLong = lastLatLongs[lastLatLongs.length - 1].lng;
-                let coords = this.addDistanceToCoordinates(lastLat, lastLong, user.headingArray[i], 0.5);
-
-                this.addToPolyline(this.polylines[user.userId], coords.latitude, coords.longitude, user.userId)
-              }
-            }
-          }
+          this.drawPolylineForEachUser(user);
         })
         this.users = data;
-
       },
       (error) => {
-        // Handle errors
         console.error('Error fetching data:', error);
       }
     );
   }
 
-  private async initializeMapOptions() {
+  private drawPolylineForEachUser(user: User) {
+    const correspondingUser = this.users.find(prevUser => prevUser.userId == user.userId);
+    if (correspondingUser != undefined) {
+      console.log(this.users)
+      // Get the number of previously drawn polylines and the number of all points
+      for (let i = this.headingsDrawnPerUser.get(user.userId)!; i < user.headingArray.length; i++) {
+        const lastLatLongs = this.polylines[user.userId].getLatLngs();
+        // @ts-ignore
+        const lastLat = lastLatLongs[lastLatLongs.length - 1].lat;
+        // @ts-ignore
+        const lastLong = lastLatLongs[lastLatLongs.length - 1].lng;
+        let coords = this.addDistanceToCoordinates(lastLat, lastLong, user.headingArray[i], 0.5);
+
+        this.addToPolyline(this.polylines[user.userId], coords.latitude, coords.longitude, user.userId)
+      }
+    }
+  }
+
+  private handleNewUser(data: User[]) {
+    data.slice(this.prevUserSize).forEach((user: User) => this.headingsDrawnPerUser.set(user.userId, 0))
+    this.marker = this.createMarker(data[this.prevUserSize].lat, data[this.prevUserSize].long); // Coordinates for the marker
+    this.marker.addTo(this.map)
+    const length = this.polylines.push(this.createPolyline(data[this.prevUserSize].lat, data[this.prevUserSize].long));
+    this.polylines[length - 1].addTo(this.map);
+    this.prevUserSize++;
+  }
+
+  private initializeMapOptions() {
     this.mapOptions = {
-      zoom: 18,
+      zoom: 21,
       center: new L.LatLng(54.371651, 18.612552)
     };
   }
 
   onMapReady(map: LeafletMap) {
     this.map = map;
-    var roads = L.gridLayer.googleMutant({
-        type: "roadmap", // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
-      })
+    L.gridLayer.googleMutant({
+      type: "roadmap",
+    })
       .addTo(this.map);
-
   }
 
 
   private createMarker(latitude: number, longitude: number): Marker {
-    const markerOptions: MarkerOptions = {};
-    this.map.flyTo([latitude, longitude]);
+    this.map.flyTo([latitude, longitude], 21);
     return new Marker(latLng(latitude, longitude));
   }
 
@@ -130,10 +125,10 @@ export class AppComponent implements OnInit {
   }
 
   private addToPolyline(polyline: Polyline, lat: number, long: number, userId: number) {
-    let foundUser: User | undefined;
-    let foundNumber: number = 0;
+    let foundNumber: number | undefined;
+    foundNumber = this.headingsDrawnPerUser.get(userId);
     // Update the number associated with the found user
-    this.headingsDrawnPerUser.set(userId, foundNumber + 1);
+    this.headingsDrawnPerUser.set(userId, foundNumber ? foundNumber + 1 : 1);
     polyline.addLatLng([lat, long])
   }
 
@@ -157,39 +152,6 @@ export class AppComponent implements OnInit {
 
     return {latitude: newLatitude, longitude: newLongitude};
   }
-
-  getCurrentLocation() {
-    return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            if (position) {
-              console.log(
-                'Latitude: ' +
-                position.coords.latitude +
-                'Longitude: ' +
-                position.coords.longitude
-              );
-              let lat = position.coords.latitude;
-              let lng = position.coords.longitude;
-
-              const location = {
-                lat,
-                lng,
-              };
-              resolve(location);
-            }
-          },
-          (error) => console.log(error)
-        );
-      } else {
-        reject('Geolocation is not supported by this browser.');
-      }
-    });
-  }
-
-  protected readonly faCoffee = faCoffee;
-  protected readonly faUsers = faUsers;
 }
 
 
