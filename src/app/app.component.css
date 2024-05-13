@@ -1,14 +1,23 @@
+:host {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
 
 .map {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);
   z-index: 0;
   padding: 0;
   width: 100%;
   height: 95%;
-  border: gray ridge 5px;
+  border: gray 5px;
+  border-radius: 1rem;
 }
 
 .col-map {
+  margin: 1rem 0rem 1rem 1rem;
+  width: 80vw;
+  padding-right:0;
+  height: 90vh;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -19,7 +28,7 @@
 }
 
 .row {
-  width: 100%;
+  width: 117%;
   flex: 0 1 auto;
   min-height: 90%
 }
@@ -28,36 +37,3 @@
   padding-left: 1rem;
 }
 
-nav {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
-  height: 4rem;
-  z-index: 1;
-  flex: 0 1 auto;
-  position: relative;
-}
-
-td {
-  max-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-td:hover {
-  text-overflow: unset;
-  overflow: unset;
-  white-space: normal;
-}
-
-.col-id {
-  width: 30%;
-}
-
-.col-marker {
-  width: 70%;
-}
-
-table {
-  width: 22vw;
-  border-top: 1rem solid transparent;
-  border-left: 3rem solid transparent;
-}

@@ -6,7 +6,8 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "server": "node ./server/server.js"
   },
   "private": true,
   "dependencies": {
@@ -19,10 +20,11 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@asymmetrik/ngx-leaflet": "^17.0.0",
+    "@types/leaflet.gridlayer.googlemutant": "^0.4.9",
     "leaflet": "^1.9.4",
+    "leaflet.gridlayer.googlemutant": "^0.14.1",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.14.3"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.5",

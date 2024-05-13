@@ -4,6 +4,7 @@ import {AppComponent} from "./app.component";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import {LeafletModule} from "@asymmetrik/ngx-leaflet";
     HttpClientModule,
     BrowserModule,
     LeafletModule,
-
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
