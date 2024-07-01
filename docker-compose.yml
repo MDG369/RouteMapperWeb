@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  route-mapper-front-end:
+    build: .
+    ports:
+      - "4200:80"
+    networks:
+      - route_mapper_web
+
+  route-mapper-back-end:
+    build: ./server
+    ports:
+      - "8080:8080"
+    networks:
+      - route_mapper_web
+
+networks:
+  route_mapper_web:
+    ipam:
+      driver: default
