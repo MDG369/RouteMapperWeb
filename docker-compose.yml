@@ -2,14 +2,14 @@ version: "3.7"
 
 services:
   route-mapper-front-end:
-    build: .
+    image: michazieli/routemapperweb-route-mapper-front-end
     ports:
       - "4200:80"
     networks:
       - route_mapper_web
 
   route-mapper-back-end:
-    build: ./server
+    image: michazieli/routemapperweb-route-mapper-back-end
     ports:
       - "8080:8080"
     networks:

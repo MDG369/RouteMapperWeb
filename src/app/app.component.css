@@ -37,3 +37,29 @@
   padding-left: 1rem;
 }
 
+#refreshButton {
+  position: absolute;
+  top: 15vh;
+  left: 24vw;
+  padding: 10px;
+  z-index: 400;
+}
+
+::ng-deep #but {
+  background-color: rgb(255, 255, 255);
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-repeat: no-repeat;
+  border: none;
+  font-size: large;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  width: 30px;
+}
+::ng-deep #but:hover {
+  background-color: rgb(235, 235, 235)
+}
+

@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {User} from "../models/user.model";
 import { Observable, interval } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -20,6 +20,13 @@ export class UserService {
       .pipe(
         switchMap(() => this.getUsers())
       );
+  }
+
+  deleteUser(id) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), body: {userId: id}
+    };
+    return this.httpClient.delete<User[]>(this.apiPath + '/user', httpOptions)
   }
 
 }

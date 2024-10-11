@@ -16,18 +16,21 @@
       <tbody>
       <ng-template ngFor let-user [ngForOf]="users">
         <tr>
-          <td>{{ user.sessionId | date: "yyyyMMdd_hhmm" }}</td>
+          <td>{{ user.sessionId | date: "yyyyMMdd_hhmm" }} <button (click)="removeUser(user)">Remove user</button></td>
         </tr>
       </ng-template>
       </tbody>
     </table>
   </div>
   <div class="col-10 col-map">
+
+
     <div class="map"
          leaflet
          [leafletOptions]="mapOptions"
          (leafletMapReady)="onMapReady($event)">
     </div>
+
   </div>
 </div>
 
